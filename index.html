@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Road Damage Classification System</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">🛣️ Road Damage AI</div>
+    <div class="nav-links">
+      <a href="{{ url_for('home') }}" class="active">Home</a>
+      <a href="{{ url_for('predict') }}">Predict</a>
+      <a href="{{ url_for('configure') }}">Configure &amp; Retrain</a>
+    </div>
+  </nav>
+
+  <main class="hero">
+    <h1>Deep Learning-Based Road Damage Classification</h1>
+    <p class="subtitle">
+      Upload a road image to detect whether it is <strong>Broken</strong> or <strong>Not Broken</strong>,
+      or tune hyperparameters and retrain the model live from your browser.
+    </p>
+
+    <div class="status-badge {{ 'ready' if model_ready else 'not-ready' }}">
+      {% if model_ready %}
+        ✅ A trained model is loaded and ready for predictions.
+      {% else %}
+        ⚠️ No trained model found yet. Go to <strong>Configure &amp; Retrain</strong> to train one.
+      {% endif %}
+    </div>
+
+    <div class="card-grid">
+      <a class="feature-card" href="{{ url_for('predict') }}">
+        <div class="icon">🔍</div>
+        <h3>Predict</h3>
+        <p>Upload a road image and get an instant Broken / Not Broken prediction with confidence.</p>
+      </a>
+      <a class="feature-card" href="{{ url_for('configure') }}">
+        <div class="icon">⚙️</div>
+        <h3>Configure &amp; Retrain</h3>
+        <p>Change learning rate, optimizer, epochs, dropout and more, then retrain and see live metrics.</p>
+      </a>
+    </div>
+
+    <section class="architecture">
+      <h2>How it works</h2>
+      <ol>
+        <li>Images are resized, normalized, and (optionally) augmented.</li>
+        <li>A MobileNetV2 backbone (transfer learning) extracts features.</li>
+        <li>A small dense head classifies the image as Broken or Not Broken Road.</li>
+        <li>Training produces real accuracy/loss graphs and a confusion matrix — nothing is hardcoded.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>
+    <p>M.Tech AIML Project &mdash; Deep Learning-Based Road Damage Classification and Interactive Model Retraining System</p>
+  </footer>
+</body>
+</html>

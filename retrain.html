@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Configure & Retrain - Road Damage Classification</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">🛣️ Road Damage AI</div>
+    <div class="nav-links">
+      <a href="{{ url_for('home') }}">Home</a>
+      <a href="{{ url_for('predict') }}">Predict</a>
+      <a href="{{ url_for('configure') }}" class="active">Configure &amp; Retrain</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h1>Configure &amp; Retrain</h1>
+
+    {% if not dataset_ready %}
+    <div class="alert alert-warning">
+      No dataset images found. Place your Kaggle dataset images inside
+      <code>dataset/Broken Road/</code> and <code>dataset/Not Broken Road/</code>, then refresh this page.
+    </div>
+    {% endif %}
+
+    <form id="retrain-form" class="config-grid">
+      <div class="config-item">
+        <label>Optimizer</label>
+        <select name="optimizer">
+          <option value="adam">Adam</option>
+          <option value="sgd">SGD</option>
+          <option value="rmsprop">RMSprop</option>
+        </select>
+      </div>
+
+      <div class="config-item">
+        <label>Activation</label>
+        <select name="activation">
+          <option value="relu">ReLU</option>
+          <option value="tanh">Tanh</option>
+          <option value="sigmoid">Sigmoid</option>
+        </select>
+      </div>
+
+      <div class="config-item">
+        <label>Learning Rate</label>
+        <select name="learning_rate">
+          <option value="0.01">0.01</option>
+          <option value="0.001" selected>0.001</option>
+          <option value="0.0001">0.0001</option>
+        </select>
+      </div>
+
+      <div class="config-item">
+        <label>Batch Size</label>
+        <select name="batch_size">
+          <option value="16">16</option>
+          <option value="32" selected>32</option>
+          <option value="64">64</option>
+        </select>
+      </div>
+
+      <div class="config-item">
+        <label>Epochs</label>
+        <input type="number" name="epochs" min="1" max="100" value="10">
+      </div>
+
+      <div class="config-item">
+        <label>Dropout</label>
+        <select name="dropout">
+          <option value="0.2">0.2</option>
+          <option value="0.3" selected>0.3</option>
+          <option value="0.5">0.5</option>
+        </select>
+      </div>
+
+      <div class="config-item">
+        <label>Image Size</label>
+        <select name="image_size">
+          <option value="128">128</option>
+          <option value="224" selected>224</option>
+          <option value="256">256</option>
+        </select>
+      </div>
+
+      <div class="config-item checkbox-item">
+        <label>
+          <input type="checkbox" name="augmentation" checked>
+          Data Augmentation (rotation, zoom, flip)
+        </label>
+      </div>
+
+      <button type="submit" class="btn-primary full-width" {{ 'disabled' if not dataset_ready }}>
+        🚀 Retrain Model
+      </button>
+    </form>
+
+    <div id="training-status" class="hidden">
+      <div class="spinner"></div>
+      <p>Training in progress&hellip; this can take a while depending on epochs and dataset size. Please keep this tab open.</p>
+    </div>
+
+    <div id="retrain-error" class="alert alert-error hidden"></div>
+
+    <section id="results-section" class="hidden">
+      <h2>Training Results</h2>
+
+      <div class="metrics-grid">
+        <div class="metric-card"><span id="m-train-acc"></span><label>Train Accuracy</label></div>
+        <div class="metric-card"><span id="m-val-acc"></span><label>Validation Accuracy</label></div>
+        <div class="metric-card"><span id="m-precision"></span><label>Precision</label></div>
+        <div class="metric-card"><span id="m-recall"></span><label>Recall</label></div>
+        <div class="metric-card"><span id="m-f1"></span><label>F1-Score</label></div>
+        <div class="metric-card"><span id="m-time"></span><label>Training Time (s)</label></div>
+      </div>
+
+      <div class="graph-grid">
+        <div class="graph-card">
+          <h3>Accuracy</h3>
+          <img id="graph-accuracy" alt="Accuracy graph">
+        </div>
+        <div class="graph-card">
+          <h3>Loss</h3>
+          <img id="graph-loss" alt="Loss graph">
+        </div>
+        <div class="graph-card">
+          <h3>Confusion Matrix</h3>
+          <img id="graph-cm" alt="Confusion matrix">
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

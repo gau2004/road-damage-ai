@@ -1,0 +1,27 @@
+{
+  "training_accuracy": 0.9451219439506531,
+  "validation_accuracy": 0.699999988079071,
+  "training_loss": 0.1363254338502884,
+  "validation_loss": 0.8489335775375366,
+  "precision": 0.6666666666666666,
+  "recall": 0.6666666666666666,
+  "f1_score": 0.6666666666666666,
+  "training_time_sec": 114.00148677825928,
+  "model_path": "saved_model\\road_model.keras",
+  "accuracy_graph": "saved_model\\accuracy.png",
+  "loss_graph": "saved_model\\loss.png",
+  "confusion_matrix": [
+    [
+      16,
+      6
+    ],
+    [
+      6,
+      12
+    ]
+  ],
+  "class_indices": {
+    "Broken Road": 0,
+    "Not Broken Road": 1
+  }
+}
